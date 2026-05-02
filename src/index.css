@@ -8,7 +8,7 @@ input[type="range"] {
   outline: none;
 }
 
-/* 🌟 滑块本体（关键发光点） */
+/* slider body 滑块本体 */
 input[type="range"]::-webkit-slider-thumb {
   appearance: none;
 
@@ -18,7 +18,7 @@ input[type="range"]::-webkit-slider-thumb {
 
   background: #A8E6CF;
 
-  /* 🌟 核心发光效果 */
+  /* glowing effect 核心发光效果 */
   box-shadow:
     0 0 6px rgba(168, 230, 207, 0.6),
     0 0 14px rgba(168, 230, 207, 0.8),
@@ -29,7 +29,7 @@ input[type="range"]::-webkit-slider-thumb {
   animation: glowPulse 2.2s infinite ease-in-out;
 }
 
-/* 🌊 呼吸动画 */
+/* breath animation 呼吸动画 */
 @keyframes glowPulse {
   0% {
     transform: scale(1);

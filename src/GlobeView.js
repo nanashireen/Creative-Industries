@@ -11,10 +11,10 @@ const GlobeView = () => {
   const [countries, setCountries] = useState([]);
   const [timeIndex, setTimeIndex] = useState(1980);
 
-  // 📦 popup state
+  // popup state
   const [selectedCountry, setSelectedCountry] = useState(null);
 
-  // 🌍 全名映射（新增）
+  // name 全名映射
   const countryNameMap = {
     AT: "Austria",
     DE: "Germany",
@@ -108,7 +108,7 @@ const GlobeView = () => {
             ↵
           </button>
 
-          {/* 内容 */}
+          {/* content 内容 */}
           <div style={{ marginTop: "24px" }}>
             <div style={{ fontSize: "14px", fontWeight: "bold" }}>
               {countryNameMap[selectedCountry.country] ||
@@ -150,7 +150,7 @@ const GlobeView = () => {
         </div>
       )}
 
-      {/* 🌟 上方说明文字（不动） */}
+      {/*  explaination 上方说明文字 */}
       <div
         style={{
           position: "absolute",
@@ -176,7 +176,7 @@ const GlobeView = () => {
         <b>future 5-year predictions</b>.
       </div>
 
-      {/* 🌐 TIME HUD（不动） */}
+      {/*  TIME HUD */}
       <div
         style={{
           position: "absolute",
@@ -228,7 +228,7 @@ const GlobeView = () => {
         </div>
       </div>
 
-      {/* 🌍 GLOBE（完全不动） */}
+      {/*  GLOBE */}
       <Globe
         ref={globeEl}
         width={window.innerWidth}
