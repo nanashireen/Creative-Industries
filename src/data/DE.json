@@ -1,0 +1,123 @@
+{
+  "kit_id": "1004",
+  "name": "Nomad Kit",
+  "location": "Frankfurt am Main, DE",
+  "lat": 50.11,
+  "lon": 8.68,
+  "last_sync": "18/05/2023",
+  "status": "ok",
+  "sensors": [
+    "ftTemp"
+  ],
+  "live": {
+    "ftTemp": {
+      "value": 17.06,
+      "unit": "\u00b0C",
+      "label": "Ambient Temp",
+      "state": "optimal"
+    }
+  },
+  "analytics": {
+    "ftTemp": {
+      "sensor_name": "ftTemp",
+      "label": "Ambient Temp",
+      "value": 17.06,
+      "unit": "\u00b0C",
+      "state": "optimal",
+      "description": "Optimal growing range",
+      "mean_24h": 17.1,
+      "min_24h": 16.69,
+      "max_24h": 18.31,
+      "trend": [
+        {
+          "time": "12:00",
+          "value": 18.1
+        },
+        {
+          "time": "13:00",
+          "value": 17.62
+        },
+        {
+          "time": "14:00",
+          "value": 17.26
+        },
+        {
+          "time": "15:00",
+          "value": 17.13
+        },
+        {
+          "time": "16:00",
+          "value": 16.96
+        },
+        {
+          "time": "17:00",
+          "value": 16.78
+        },
+        {
+          "time": "18:00",
+          "value": 16.74
+        },
+        {
+          "time": "19:00",
+          "value": 16.88
+        },
+        {
+          "time": "20:00",
+          "value": 17.03
+        },
+        {
+          "time": "21:00",
+          "value": 17.04
+        }
+      ],
+      "record_count": 1547
+    }
+  },
+  "gas_concentration": {},
+  "outdoor": null,
+  "deviation": null,
+  "efficiency_trend": [
+    {
+      "time": "12:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "13:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "14:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "15:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "16:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "17:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "18:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "19:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "20:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "21:00",
+      "efficiency_pct": 100.0
+    }
+  ],
+  "efficiency_avg": 100.0,
+  "scraped_at": "2026-05-03T21:41:31.757759+00:00"
+}

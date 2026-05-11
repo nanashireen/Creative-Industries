@@ -1,0 +1,163 @@
+{
+  "kit_id": "1005",
+  "name": "Colgate University 1",
+  "location": "Ballston Lake, US",
+  "lat": 42.87,
+  "lon": -73.85,
+  "last_sync": "07/08/2023",
+  "status": "ok",
+  "sensors": [
+    "ftTemp"
+  ],
+  "live": {
+    "ftTemp": {
+      "value": 19.56,
+      "unit": "\u00b0C",
+      "label": "Ambient Temp",
+      "state": "optimal"
+    }
+  },
+  "analytics": {
+    "ftTemp": {
+      "sensor_name": "ftTemp",
+      "label": "Ambient Temp",
+      "value": 19.56,
+      "unit": "\u00b0C",
+      "state": "optimal",
+      "description": "Optimal growing range",
+      "mean_24h": 20.43,
+      "min_24h": 19.31,
+      "max_24h": 32.5,
+      "trend": [
+        {
+          "time": "15:00",
+          "value": 21.75
+        },
+        {
+          "time": "18:00",
+          "value": 23.26
+        },
+        {
+          "time": "19:00",
+          "value": 29.12
+        },
+        {
+          "time": "20:00",
+          "value": 25.42
+        },
+        {
+          "time": "21:00",
+          "value": 21.24
+        },
+        {
+          "time": "22:00",
+          "value": 21.04
+        },
+        {
+          "time": "23:00",
+          "value": 20.87
+        },
+        {
+          "time": "00:00",
+          "value": 20.54
+        },
+        {
+          "time": "01:00",
+          "value": 20.19
+        },
+        {
+          "time": "02:00",
+          "value": 19.85
+        },
+        {
+          "time": "03:00",
+          "value": 19.63
+        },
+        {
+          "time": "04:00",
+          "value": 19.54
+        },
+        {
+          "time": "05:00",
+          "value": 19.49
+        },
+        {
+          "time": "06:00",
+          "value": 19.45
+        },
+        {
+          "time": "07:00",
+          "value": 19.51
+        }
+      ],
+      "record_count": 813
+    }
+  },
+  "gas_concentration": {},
+  "outdoor": null,
+  "deviation": null,
+  "efficiency_trend": [
+    {
+      "time": "00:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "01:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "02:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "03:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "04:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "05:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "06:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "07:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "15:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "18:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "19:00",
+      "efficiency_pct": 0.0
+    },
+    {
+      "time": "20:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "21:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "22:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "23:00",
+      "efficiency_pct": 100.0
+    }
+  ],
+  "efficiency_avg": 93.3,
+  "scraped_at": "2026-05-03T21:41:40.030313+00:00"
+}

@@ -1,0 +1,59 @@
+{
+  "kit_id": "1011",
+  "name": "Concordia University 1",
+  "location": "Montreal, CA",
+  "lat": 45.5,
+  "lon": -73.57,
+  "last_sync": "19/10/2023",
+  "status": "ok",
+  "sensors": [
+    "ftTemp"
+  ],
+  "live": {
+    "ftTemp": {
+      "value": 58.0,
+      "unit": "\u00b0C",
+      "label": "Ambient Temp",
+      "state": "heat_stress"
+    }
+  },
+  "analytics": {
+    "ftTemp": {
+      "sensor_name": "ftTemp",
+      "label": "Ambient Temp",
+      "value": 58.0,
+      "unit": "\u00b0C",
+      "state": "heat_stress",
+      "description": "Above safe growing threshold",
+      "mean_24h": 37.33,
+      "min_24h": 6.0,
+      "max_24h": 60.0,
+      "trend": [
+        {
+          "time": "16:00",
+          "value": 41.64
+        },
+        {
+          "time": "17:00",
+          "value": 35.44
+        }
+      ],
+      "record_count": 36
+    }
+  },
+  "gas_concentration": {},
+  "outdoor": null,
+  "deviation": null,
+  "efficiency_trend": [
+    {
+      "time": "16:00",
+      "efficiency_pct": 0.0
+    },
+    {
+      "time": "17:00",
+      "efficiency_pct": 0.0
+    }
+  ],
+  "efficiency_avg": 0.0,
+  "scraped_at": "2026-05-03T21:42:15.248735+00:00"
+}

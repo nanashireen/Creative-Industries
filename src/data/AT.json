@@ -1,0 +1,239 @@
+{
+  "kit_id": "1001",
+  "name": "Demo Kit",
+  "location": "Salzburg, AT",
+  "lat": 47.8,
+  "lon": 13.04,
+  "last_sync": "19/09/2025",
+  "status": "ok",
+  "sensors": [
+    "ftTemp"
+  ],
+  "live": {
+    "ftTemp": {
+      "value": 22.31,
+      "unit": "\u00b0C",
+      "label": "Ambient Temp",
+      "state": "optimal"
+    }
+  },
+  "analytics": {
+    "ftTemp": {
+      "sensor_name": "ftTemp",
+      "label": "Ambient Temp",
+      "value": 22.31,
+      "unit": "\u00b0C",
+      "state": "optimal",
+      "description": "Optimal growing range",
+      "mean_24h": 22.31,
+      "min_24h": 22.31,
+      "max_24h": 22.31,
+      "trend": [
+        {
+          "time": "16:00",
+          "value": 22.31
+        },
+        {
+          "time": "17:00",
+          "value": 22.31
+        },
+        {
+          "time": "18:00",
+          "value": 22.31
+        },
+        {
+          "time": "19:00",
+          "value": 22.31
+        },
+        {
+          "time": "20:00",
+          "value": 22.31
+        },
+        {
+          "time": "21:00",
+          "value": 22.31
+        },
+        {
+          "time": "22:00",
+          "value": 22.31
+        },
+        {
+          "time": "23:00",
+          "value": 22.31
+        },
+        {
+          "time": "00:00",
+          "value": 22.31
+        },
+        {
+          "time": "01:00",
+          "value": 22.31
+        },
+        {
+          "time": "02:00",
+          "value": 22.31
+        },
+        {
+          "time": "03:00",
+          "value": 22.31
+        },
+        {
+          "time": "04:00",
+          "value": 22.31
+        },
+        {
+          "time": "05:00",
+          "value": 22.31
+        },
+        {
+          "time": "06:00",
+          "value": 22.31
+        },
+        {
+          "time": "07:00",
+          "value": 22.31
+        },
+        {
+          "time": "08:00",
+          "value": 22.31
+        },
+        {
+          "time": "09:00",
+          "value": 22.31
+        },
+        {
+          "time": "10:00",
+          "value": 22.31
+        },
+        {
+          "time": "11:00",
+          "value": 22.31
+        },
+        {
+          "time": "12:00",
+          "value": 22.31
+        },
+        {
+          "time": "13:00",
+          "value": 22.31
+        },
+        {
+          "time": "14:00",
+          "value": 22.31
+        },
+        {
+          "time": "15:00",
+          "value": 22.31
+        },
+        {
+          "time": "16:00",
+          "value": 22.31
+        }
+      ],
+      "record_count": 1219
+    }
+  },
+  "gas_concentration": {},
+  "outdoor": null,
+  "deviation": null,
+  "efficiency_trend": [
+    {
+      "time": "00:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "01:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "02:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "03:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "04:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "05:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "06:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "07:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "08:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "09:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "10:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "11:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "12:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "13:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "14:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "15:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "16:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "17:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "18:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "19:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "20:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "21:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "22:00",
+      "efficiency_pct": 100.0
+    },
+    {
+      "time": "23:00",
+      "efficiency_pct": 100.0
+    }
+  ],
+  "efficiency_avg": 100.0,
+  "scraped_at": "2026-05-03T21:40:47.109964+00:00"
+}
