@@ -2,7 +2,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Cloud, Thermometer, Droplets, Wind } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography, Annotation } from 'react-simple-maps';
-import './index.css';
 import tacLogo from './assets/tac logo.png';
 
 import AT from './data/AT.json';
@@ -23,12 +22,8 @@ const scaleMap = {
 };
 
 const centerMap = {
-  AT: [13.5, 47.5],
-  DE: [10.0, 51.0],
-  GB: [-2.0, 54.0],
-  US: [-98.0, 39.0],
-  TG: [1.0, 8.5],
-  CA: [-96.0, 60.0],
+  AT: [13.5, 47.5], DE: [10.0, 51.0], GB: [-2.0, 54.0],
+  US: [-98.0, 39.0], TG: [1.0, 8.5], CA: [-96.0, 60.0],
 };
 
 const cityMarkers = {
@@ -65,6 +60,12 @@ const cityMarkers = {
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
+const BG = 'linear-gradient(160deg, #1a2e22 0%, #22382a 50%, #1a2e22 100%)';
+const CARD = { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(56,188,120,0.2)', borderRadius: '15px', padding: '20px', marginBottom: '20px' };
+const GREEN = '#38bc78';
+const GREEN_DIM = 'rgba(56,188,120,0.5)';
+const GREEN_FAINT = 'rgba(56,188,120,0.12)';
+
 export default function CountryRawData() {
   const { code } = useParams();
   const navigate = useNavigate();
@@ -77,14 +78,9 @@ export default function CountryRawData() {
   useEffect(() => {
     if (!data) return;
     setWeatherLoading(true);
-    fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${data.lat}&longitude=${data.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&wind_speed_unit=mph`
-    )
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${data.lat}&longitude=${data.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&wind_speed_unit=mph`)
       .then(res => res.json())
-      .then(json => {
-        setWeather(json.current);
-        setWeatherLoading(false);
-      })
+      .then(json => { setWeather(json.current); setWeatherLoading(false); })
       .catch(() => setWeatherLoading(false));
   }, [countryCode]);
 
@@ -98,44 +94,35 @@ export default function CountryRawData() {
     return 'Stormy';
   };
 
-  if (!data) {
-    return (
-      <div style={{ padding: '50px', textAlign: 'center' }}>
-        <h2>Data Not Found</h2>
-        <button onClick={() => navigate(-1)}>Go Back</button>
-      </div>
-    );
-  }
+  if (!data) return (
+    <div style={{ padding: '50px', textAlign: 'center', background: '#1a2e22', minHeight: '100vh', color: 'white' }}>
+      <h2>Data Not Found</h2>
+      <button onClick={() => navigate(-1)}>Go Back</button>
+    </div>
+  );
 
   return (
-    <div className="app-container overflow-y">
-      <header className="header" style={{ justifyContent: 'space-between', position: 'relative' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-          aria-label="Go back"
-        >
-          <ChevronLeft size={24} color="#059669" />
+    <div style={{ background: BG, minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+
+      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', position: 'relative', borderBottom: '1px solid rgba(56,188,120,0.15)' }}>
+        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+          <ChevronLeft size={24} color={GREEN} />
         </button>
-        <img
-          src={tacLogo}
-          alt="TeleAgriCulture"
-          style={{ height: '50px', objectFit: 'contain', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
-        />
+        <img src={tacLogo} alt="TeleAgriCulture" style={{ height: '50px', objectFit: 'contain', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }} />
       </header>
 
       <div style={{ padding: '0 2rem' }}>
-        <h1 style={{ fontSize: '42px', margin: '10px 0', lineHeight: '1.1' }}>
-          {data.location}<br />Raw Data
+        <h1 style={{ fontSize: '42px', margin: '20px 0 8px 0', lineHeight: '1.1', color: 'white', fontWeight: '400', fontFamily: "monospace" }}>
+          {data.location}<br />Overview
         </h1>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '30px' }}>
-          <span style={{ background: '#dcfce7', color: '#15803d', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>● LIVE STREAMING</span>
-          <span style={{ color: '#94a3b8', fontSize: '12px' }}>Kit ID: {data.kit_id}</span>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '24px' }}>
+          <span style={{ background: GREEN_FAINT, color: GREEN, padding: '4px 12px', borderRadius: '20px', fontSize: '13px', fontWeight: 'bold', border: `1px solid ${GREEN_DIM}` }}>● LIVE STREAMING</span>
+          <span style={{ color: GREEN_DIM, fontSize: '13px' }}>Kit ID: {data.kit_id}</span>
         </div>
 
         {/* MAP */}
-        <div style={{ borderRadius: '15px', overflow: 'hidden', marginBottom: '10px', height: '260px', background: '#f0faf5', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ borderRadius: '15px', overflow: 'hidden', marginBottom: '20px', height: '260px', background: GREEN_FAINT, border: '1px solid rgba(56,188,120,0.2)', position: 'relative' }}>
           <ComposableMap
             projection="geoMercator"
             projectionConfig={{ center: centerMap[countryCode] || [data.lon, data.lat], scale: scaleMap[countryCode] || 800 }}
@@ -146,50 +133,20 @@ export default function CountryRawData() {
                 geographies.map(geo => {
                   const isTarget = geo.id === countryNumericMap[countryCode];
                   return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={isTarget ? '#a8d5b5' : 'transparent'}
-                      stroke={isTarget ? '#6ab88a' : 'transparent'}
-                      style={{
-                        default: { outline: 'none' },
-                        hover: { outline: 'none' },
-                        pressed: { outline: 'none' }
-                      }}
+                    <Geography key={geo.rsmKey} geography={geo}
+                      fill={isTarget ? '#2d6a4f' : 'transparent'}
+                      stroke={isTarget ? GREEN : 'transparent'}
+                      style={{ default: { outline: 'none' }, hover: { outline: 'none' }, pressed: { outline: 'none' } }}
                     />
                   );
                 })
               }
             </Geographies>
-
             {(cityMarkers[countryCode] || []).map(city => (
-              <Annotation
-                key={city.name}
-                subject={[city.lon, city.lat]}
-                dx={city.dx}
-                dy={city.dy}
-                connectorProps={{ stroke: '#059669', strokeWidth: 1 }}
-              >
-                <foreignObject
-                  x={city.dx > 0 ? 0 : -220}
-                  y={-26}
-                  width={220}
-                  height={60}
-                >
-                  <div style={{
-                    background: 'white',
-                    borderRadius: '10px',
-                    padding: '6px 12px',
-                    fontSize: '22px',
-                    fontWeight: '500',
-                    color: '#1e293b',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    <span style={{ color: '#059669', fontSize: '22px' }}>●</span>
+              <Annotation key={city.name} subject={[city.lon, city.lat]} dx={city.dx} dy={city.dy} connectorProps={{ stroke: GREEN, strokeWidth: 1 }}>
+                <foreignObject x={city.dx > 0 ? 0 : -280} y={-34} width={280} height={70}>
+                  <div style={{ background: 'rgba(26,46,34,0.95)', border: `1px solid ${GREEN_DIM}`, borderRadius: '10px', padding: '8px 14px', fontSize: '20px', fontWeight: '600', fontFamily: "'Inter', sans-serif", color: 'white', display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+                    <span style={{ color: GREEN, fontSize: '20px' }}>●</span>
                     {city.name}
                   </div>
                 </foreignObject>
@@ -199,101 +156,57 @@ export default function CountryRawData() {
         </div>
 
         {/* LIVE WEATHER */}
-        <div style={{ background: 'white', padding: '20px', borderRadius: '15px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', marginBottom: '20px' }}>
+        <div style={CARD}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-            <h3 style={{ margin: 0 }}>Live Weather</h3>
-            <Cloud size={20} color="#059669" />
+            <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>Live Weather</h3>
+            <Cloud size={20} color={GREEN} />
           </div>
           {weatherLoading ? (
-            <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0 }}>Fetching weather...</p>
+            <p style={{ color: GREEN_DIM, fontSize: '15px', margin: 0 }}>Fetching weather...</p>
           ) : weather ? (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-              <div>
-                <p style={{ fontSize: '10px', color: '#94a3b8', margin: '0 0 4px 0' }}>TEMPERATURE</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Thermometer size={16} color="#059669" />
-                  <h3 style={{ margin: 0 }}>{weather.temperature_2m}°C</h3>
+              {[
+                { label: 'TEMPERATURE', icon: <Thermometer size={18} color={GREEN} />, value: `${weather.temperature_2m}°C` },
+                { label: 'HUMIDITY', icon: <Droplets size={18} color={GREEN} />, value: `${weather.relative_humidity_2m}%` },
+                { label: 'WIND SPEED', icon: <Wind size={18} color={GREEN} />, value: `${weather.wind_speed_10m} mph` },
+                { label: 'CONDITIONS', icon: <Cloud size={18} color={GREEN} />, value: getWeatherLabel(weather.weather_code) },
+              ].map(item => (
+                <div key={item.label}>
+                  <p style={{ fontSize: '11px', color: GREEN_DIM, margin: '0 0 4px 0', letterSpacing: '0.05em' }}>{item.label}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {item.icon}
+                    <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>{item.value}</h3>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p style={{ fontSize: '10px', color: '#94a3b8', margin: '0 0 4px 0' }}>HUMIDITY</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Droplets size={16} color="#059669" />
-                  <h3 style={{ margin: 0 }}>{weather.relative_humidity_2m}%</h3>
-                </div>
-              </div>
-              <div>
-                <p style={{ fontSize: '10px', color: '#94a3b8', margin: '0 0 4px 0' }}>WIND SPEED</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Wind size={16} color="#059669" />
-                  <h3 style={{ margin: 0 }}>{weather.wind_speed_10m} mph</h3>
-                </div>
-              </div>
-              <div>
-                <p style={{ fontSize: '10px', color: '#94a3b8', margin: '0 0 4px 0' }}>CONDITIONS</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Cloud size={16} color="#059669" />
-                  <h3 style={{ margin: 0, fontSize: '14px' }}>{getWeatherLabel(weather.weather_code)}</h3>
-                </div>
-              </div>
+              ))}
             </div>
           ) : (
-            <p style={{ color: '#ef4444', fontSize: '13px', margin: 0 }}>Weather unavailable</p>
+            <p style={{ color: '#ef4444', fontSize: '15px', margin: 0 }}>Weather unavailable</p>
           )}
         </div>
 
         {/* KIT INFO */}
-        <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '15px', marginBottom: '20px', border: '1px solid #f1f5f9' }}>
+        <div style={CARD}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <p style={{ fontSize: '10px', color: '#94a3b8', margin: 0 }}>KIT NAME</p>
-              <h2 style={{ margin: '5px 0' }}>{data.name}</h2>
+              <p style={{ fontSize: '11px', color: GREEN_DIM, margin: 0, letterSpacing: '0.05em' }}>KIT NAME</p>
+              <h2 style={{ margin: '5px 0', color: 'white', fontSize: '24px' }}>{data.name}</h2>
             </div>
-            <span style={{ background: '#dcfce7', color: '#15803d', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 'bold' }}>
+            <span style={{ background: GREEN_FAINT, color: GREEN, padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', border: `1px solid ${GREEN_DIM}` }}>
               {data.status.toUpperCase()}
             </span>
           </div>
-          <p style={{ fontSize: '10px', color: '#059669', margin: '10px 0 0 0' }}>🛡️ Last sync: {data.last_sync}</p>
+          <p style={{ fontSize: '13px', color: GREEN, margin: '10px 0 0 0' }}>🛡️ Last sync: {data.last_sync}</p>
         </div>
 
         {/* BUTTONS */}
-        <button
-          onClick={() => navigate(`/country/${countryCode}/details`)}
-          style={{
-            width: '100%',
-            padding: '16px',
-            background: '#059669',
-            color: 'white',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '15px',
-            fontWeight: 'bold',
-            letterSpacing: '0.05em',
-            cursor: 'pointer',
-            marginBottom: '12px',
-            textTransform: 'uppercase'
-          }}
-        >
+        <button onClick={() => navigate(`/country/${countryCode}/details`)}
+          style={{ width: '100%', padding: '16px', background: GREEN, color: 'white', border: 'none', borderRadius: '12px', fontSize: '15px', fontWeight: 'bold', letterSpacing: '0.08em', cursor: 'pointer', marginBottom: '12px', textTransform: 'uppercase', fontFamily: "'Inter', sans-serif", boxShadow: `0 0 20px ${GREEN_FAINT}` }}>
           Details
         </button>
 
-        <button
-          onClick={() => navigate(`/country/${countryCode}/dashboard`)}
-          style={{
-            width: '100%',
-            padding: '16px',
-            background: '#047857',
-            color: 'white',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '15px',
-            fontWeight: 'bold',
-            letterSpacing: '0.05em',
-            cursor: 'pointer',
-            marginBottom: '30px',
-            textTransform: 'uppercase'
-          }}
-        >
+        <button onClick={() => navigate(`/country/${countryCode}/dashboard`)}
+          style={{ width: '100%', padding: '16px', background: 'rgba(255,255,255,0.07)', color: GREEN, border: `1px solid ${GREEN_DIM}`, borderRadius: '12px', fontSize: '15px', fontWeight: 'bold', letterSpacing: '0.08em', cursor: 'pointer', marginBottom: '30px', textTransform: 'uppercase', fontFamily: "'Inter', sans-serif" }}>
           Dashboard
         </button>
       </div>
