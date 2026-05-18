@@ -1,136 +1,153 @@
 {
-  "kit_id": "1002",
-  "name": "AEC/STWST",
-  "location": "Linz, AT",
+  "kit_id": "1023",
+  "name": "Kara (Minodu 01)",
+  "location": "Lomé, TG",
   "lat": 48.31,
   "lon": 14.29,
-  "last_sync": "19/12/2023",
+  "last_sync": "17/07/2025",
   "status": "ok",
   "sensors": [
-    "ftTemp"
+    "ftTemp",
+    "ftHumidity"
   ],
   "live": {
     "ftTemp": {
-      "value": 20.75,
-      "unit": "\u00b0C",
+      "value": 29.8,
+      "unit": "°C",
       "label": "Ambient Temp",
       "state": "optimal"
+    },
+    "ftHumidity": {
+      "value": 72.4,
+      "unit": "%",
+      "label": "Humidity",
+      "state": "high"
     }
   },
   "analytics": {
     "ftTemp": {
       "sensor_name": "ftTemp",
       "label": "Ambient Temp",
-      "value": 20.75,
-      "unit": "\u00b0C",
+      "value": 29.8,
+      "unit": "°C",
       "state": "optimal",
-      "description": "Optimal growing range",
-      "mean_24h": 20.75,
-      "min_24h": 20.75,
-      "max_24h": 20.75,
+      "description": "Temperature readings collected throughout the day",
+      "mean_24h": 31.27,
+      "min_24h": 29.8,
+      "max_24h": 32.2,
       "trend": [
         {
-          "time": "16:00",
-          "value": 20.75
+          "time": "16:05",
+          "value": 32.1
         },
         {
-          "time": "17:00",
-          "value": 20.75
+          "time": "16:07",
+          "value": 32.1
         },
         {
-          "time": "18:00",
-          "value": 20.75
+          "time": "16:09",
+          "value": 32.1
         },
         {
-          "time": "19:00",
-          "value": 20.75
+          "time": "16:11",
+          "value": 32.0
         },
         {
-          "time": "20:00",
-          "value": 20.75
+          "time": "16:13",
+          "value": 32.1
         },
         {
-          "time": "21:00",
-          "value": 20.75
+          "time": "16:15",
+          "value": 32.1
         },
         {
-          "time": "22:00",
-          "value": 20.75
+          "time": "16:17",
+          "value": 32.0
         },
         {
-          "time": "23:00",
-          "value": 20.75
+          "time": "16:19",
+          "value": 32.0
         },
         {
-          "time": "00:00",
-          "value": 20.75
+          "time": "16:22",
+          "value": 32.1
         },
         {
-          "time": "01:00",
-          "value": 20.75
+          "time": "16:24",
+          "value": 32.2
         },
         {
-          "time": "02:00",
-          "value": 20.75
+          "time": "18:10",
+          "value": 29.8
         },
         {
-          "time": "03:00",
-          "value": 20.75
-        },
-        {
-          "time": "04:00",
-          "value": 20.75
-        },
-        {
-          "time": "05:00",
-          "value": 20.75
-        },
-        {
-          "time": "06:00",
-          "value": 20.75
-        },
-        {
-          "time": "07:00",
-          "value": 20.75
-        },
-        {
-          "time": "08:00",
-          "value": 20.75
-        },
-        {
-          "time": "09:00",
-          "value": 20.75
-        },
-        {
-          "time": "10:00",
-          "value": 20.75
-        },
-        {
-          "time": "11:00",
-          "value": 20.75
-        },
-        {
-          "time": "12:00",
-          "value": 20.75
-        },
-        {
-          "time": "13:00",
-          "value": 20.75
-        },
-        {
-          "time": "14:00",
-          "value": 20.75
-        },
-        {
-          "time": "15:00",
-          "value": 20.75
-        },
-        {
-          "time": "16:00",
-          "value": 20.75
+          "time": "18:12",
+          "value": 29.8
         }
       ],
-      "record_count": 1218
+      "record_count": 12
+    },
+    "ftHumidity": {
+      "sensor_name": "ftHumidity",
+      "label": "Humidity",
+      "value": 72.4,
+      "unit": "%",
+      "state": "high",
+      "description": "Humidity readings collected throughout the day",
+      "mean_24h": 61.25,
+      "min_24h": 58.2,
+      "max_24h": 72.4,
+      "trend": [
+        {
+          "time": "16:05",
+          "value": 58.2
+        },
+        {
+          "time": "16:07",
+          "value": 58.4
+        },
+        {
+          "time": "16:09",
+          "value": 58.4
+        },
+        {
+          "time": "16:11",
+          "value": 58.5
+        },
+        {
+          "time": "16:13",
+          "value": 58.7
+        },
+        {
+          "time": "16:15",
+          "value": 58.9
+        },
+        {
+          "time": "16:17",
+          "value": 59.1
+        },
+        {
+          "time": "16:19",
+          "value": 59.4
+        },
+        {
+          "time": "16:22",
+          "value": 59.4
+        },
+        {
+          "time": "16:24",
+          "value": 59.2
+        },
+        {
+          "time": "18:10",
+          "value": 72.4
+        },
+        {
+          "time": "18:12",
+          "value": 72.4
+        }
+      ],
+      "record_count": 12
     }
   },
   "gas_concentration": {},
@@ -138,102 +155,18 @@
   "deviation": null,
   "efficiency_trend": [
     {
-      "time": "00:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "01:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "02:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "03:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "04:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "05:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "06:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "07:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "08:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "09:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "10:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "11:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "12:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "13:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "14:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "15:00",
-      "efficiency_pct": 100.0
-    },
-    {
       "time": "16:00",
-      "efficiency_pct": 100.0
+      "efficiency_pct": 98.0
     },
     {
       "time": "17:00",
-      "efficiency_pct": 100.0
+      "efficiency_pct": 97.5
     },
     {
       "time": "18:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "19:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "20:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "21:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "22:00",
-      "efficiency_pct": 100.0
-    },
-    {
-      "time": "23:00",
-      "efficiency_pct": 100.0
+      "efficiency_pct": 99.0
     }
   ],
-  "efficiency_avg": 100.0,
-  "scraped_at": "2026-05-03T21:40:57.360062+00:00"
+  "efficiency_avg": 98.2,
+  "scraped_at": "2026-05-17T18:12:45+00:00"
 }

@@ -7,13 +7,20 @@
   "last_sync": "19/09/2025",
   "status": "ok",
   "sensors": [
-    "ftTemp"
+    "ftTemp",
+    "ftHumidity"
   ],
   "live": {
     "ftTemp": {
       "value": 22.31,
-      "unit": "\u00b0C",
+      "unit": "°C",
       "label": "Ambient Temp",
+      "state": "optimal"
+    },
+    "ftHumidity": {
+      "value": 52.2,
+      "unit": "%",
+      "label": "Humidity",
       "state": "optimal"
     }
   },
@@ -22,7 +29,7 @@
       "sensor_name": "ftTemp",
       "label": "Ambient Temp",
       "value": 22.31,
-      "unit": "\u00b0C",
+      "unit": "°C",
       "state": "optimal",
       "description": "Optimal growing range",
       "mean_24h": 22.31,
@@ -131,6 +138,68 @@
         }
       ],
       "record_count": 1219
+    },
+    "ftHumidity": {
+      "sensor_name": "ftHumidity",
+      "label": "Humidity",
+      "value": 52.2,
+      "unit": "%",
+      "state": "optimal",
+      "description": "Stable humidity readings throughout the day",
+      "mean_24h": 52.2,
+      "min_24h": 52.2,
+      "max_24h": 52.2,
+      "trend": [
+        {
+          "time": "05:00",
+          "value": 52.2
+        },
+        {
+          "time": "06:00",
+          "value": 52.2
+        },
+        {
+          "time": "07:00",
+          "value": 52.2
+        },
+        {
+          "time": "08:00",
+          "value": 52.2
+        },
+        {
+          "time": "09:00",
+          "value": 52.2
+        },
+        {
+          "time": "10:00",
+          "value": 52.2
+        },
+        {
+          "time": "11:00",
+          "value": 52.2
+        },
+        {
+          "time": "12:00",
+          "value": 52.2
+        },
+        {
+          "time": "13:00",
+          "value": 52.2
+        },
+        {
+          "time": "14:00",
+          "value": 52.2
+        },
+        {
+          "time": "15:00",
+          "value": 52.2
+        },
+        {
+          "time": "16:00",
+          "value": 52.2
+        }
+      ],
+      "record_count": 12
     }
   },
   "gas_concentration": {},

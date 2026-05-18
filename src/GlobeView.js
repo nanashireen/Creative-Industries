@@ -3,10 +3,12 @@ import Globe from "react-globe.gl";
 import * as THREE from "three";
 import { feature } from "topojson-client";
 import { useNavigate } from "react-router-dom";
+import { useYear } from "./YearContext";
 
 const GlobeView = () => {
   const globeEl = useRef();
   const navigate = useNavigate();
+  const { setSelectedYear } = useYear();
 
   const [countries, setCountries] = useState([]);
   const [timeIndex, setTimeIndex] = useState(1980);
@@ -56,6 +58,12 @@ const GlobeView = () => {
         setCountries(countries);
       });
   }, []);
+
+  const handleYearChange = (e) => {
+    const year = Number(e.target.value);
+    setTimeIndex(year);
+    setSelectedYear(year);
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -119,6 +127,12 @@ const GlobeView = () => {
               {selectedCountry.country}
             </div>
 
+            {timeIndex && (
+              <div style={{ fontSize: "11px", marginTop: "6px", color: "#a8e6cf", opacity: 0.8 }}>
+                Selected year: <b>{timeIndex}</b>
+              </div>
+            )}
+
             <div style={{ fontSize: "11px", marginTop: "10px", opacity: 0.8 }}>
               Environmental / prediction dataset node
             </div>
@@ -150,7 +164,7 @@ const GlobeView = () => {
         </div>
       )}
 
-      {/*  explaination 上方说明文字 */}
+      {/*  explaination 上方说明文字 */}
       <div
         style={{
           position: "absolute",
@@ -176,7 +190,7 @@ const GlobeView = () => {
         <b>future 5-year predictions</b>.
       </div>
 
-      {/*  TIME HUD */}
+      {/*  TIME HUD */}
       <div
         style={{
           position: "absolute",
@@ -213,7 +227,7 @@ const GlobeView = () => {
           min="1980"
           max="2031"
           value={timeIndex}
-          onChange={(e) => setTimeIndex(Number(e.target.value))}
+          onChange={handleYearChange}
           style={{
             width: "220px",
             appearance: "none",
@@ -228,7 +242,7 @@ const GlobeView = () => {
         </div>
       </div>
 
-      {/*  GLOBE */}
+      {/*  GLOBE */}
       <Globe
         ref={globeEl}
         width={window.innerWidth}
@@ -291,13 +305,13 @@ const GlobeView = () => {
           el.style.pointerEvents = "auto";
           el.style.zIndex = "9999";
 
-         el.onclick = (e) => {
-  e.stopPropagation();
+          el.onclick = (e) => {
+            e.stopPropagation();
 
-  setSelectedCountry({
-    country: d.country
-  });
-};
+            setSelectedCountry({
+              country: d.country
+            });
+          };
 
           return el;
         }}
