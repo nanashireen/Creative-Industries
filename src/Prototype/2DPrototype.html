@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Explorer - Interactive Map</title>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #2c3e50;
+            /* 图片中的原始配色 */
+            --color-na: #ef5350; /* North America - Red */
+            --color-sa: #ff9800; /* South America - Orange */
+            --color-af: #ffca28; /* Africa - Yellow */
+            --color-eu: #1e88e5; /* Europe - Blue */
+            --color-as: #9ccc65; /* Asia - Green */
+            --color-oc: #81d4fa; /* Oceania - Light Blue */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        h1 { color: var(--text-color); margin-bottom: 10px; font-weight: 300; letter-spacing: 2px; }
+        p { color: #666; margin-bottom: 40px; }
+
+        .map-wrapper {
+            position: relative;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 板块基础样式 */
+        .continent {
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            stroke: rgba(0,0,0,0.1);
+            stroke-width: 1;
+        }
+
+        /* 鼠标悬停时的 3D 效果 */
+        .continent:hover {
+            transform: translateY(-15px);
+            filter: brightness(1.1) drop-shadow(0 20px 20px rgba(0,0,0,0.2));
+        }
+
+        /* 标签文字样式 */
+        .label {
+            font-size: 18px;
+            font-weight: 800;
+            fill: white;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+        }
+
+        /* 各板块颜色填充 */
+        .na { fill: var(--color-na); }
+        .sa { fill: var(--color-sa); }
+        .af { fill: var(--color-af); }
+        .eu { fill: var(--color-eu); }
+        .as { fill: var(--color-as); }
+        .oc { fill: var(--color-oc); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>GLOBAL EXPLORER</h1>
+    <p>Interactive Continental Map Overview</p>
+
+    <div class="map-wrapper">
+        <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+            <g class="continent">
+                <path class="na" d="M100,100 C150,50 250,80 300,150 L350,350 L250,400 L100,300 Z" />
+                <text x="180" y="220" class="label">North America</text>
+            </g>
+
+            <g class="continent">
+                <path class="sa" d="M260,410 L350,410 L320,580 L280,580 Z" />
+                <text x="270" y="500" class="label" style="font-size: 14px;">South America</text>
+            </g>
+
+            <g class="continent">
+                <path class="af" d="M450,300 L580,300 L600,550 L500,580 L440,500 Z" />
+                <text x="480" y="450" class="label">Africa</text>
+            </g>
+
+            <g class="continent">
+                <path class="eu" d="M450,150 L550,150 L570,300 L450,300 Z" />
+                <text x="475" y="240" class="label" style="font-size: 14px;">Europe</text>
+            </g>
+
+            <g class="continent">
+                <path class="as" d="M560,100 L900,150 L950,400 L600,450 L580,280 Z" />
+                <text x="730" y="280" class="label">Asia</text>
+            </g>
+
+            <g class="continent">
+                <path class="oc" d="M780,480 L920,480 L900,580 L800,580 Z" />
+                <text x="810" y="540" class="label" style="font-size: 12px;">Australia</text>
+            </g>
+        </svg>
+    </div>
+</div>
+
+</body>
+</html>

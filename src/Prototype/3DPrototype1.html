@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Matrix | 1:1 Precision Drill-Down</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; color: #4af7a1; font-family: 'Helvetica Neue', sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; cursor: crosshair; }
+        
+        /* 保持 UI 风格一致 */
+        .ui-hud { position: absolute; top: 30px; left: 30px; border-left: 3px solid #4af7a1; padding-left: 15px; pointer-events: none; z-index: 10; }
+        
+        /* 国家一比一地块视图 */
+        #country-overlay {
+            position: fixed; inset: 0; background: #000; display: none;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 100;
+        }
+
+        .back-btn { 
+            position: absolute; bottom: 50px; padding: 12px 30px; border: 1px solid #4af7a1; 
+            background: transparent; color: #4af7a1; cursor: pointer; letter-spacing: 2px;
+        }
+        .back-btn:hover { background: #4af7a1; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="ui-hud">
+        <div style="font-size: 18px; font-weight: bold;">[ STRATEGIC_MAP_v8.0 ]</div>
+        <div id="status-hint" style="font-size: 11px; margin-top: 5px; color: #fff; opacity: 0.6;">ORBITAL_VIEW_ACTIVE</div>
+    </div>
+
+    <div id="country-overlay">
+        <h1 id="country-name-banner" style="letter-spacing: 15px; font-weight: 200; margin-bottom: 20px;">COUNTRY</h1>
+        <canvas id="country-canvas" style="width: 80vw; height: 60vh; border: 1px solid rgba(74, 247, 161, 0.1);"></canvas>
+        <button class="back-btn" onclick="exitToGlobe()">RETURN TO ORBIT</button>
+    </div>
+
+    <canvas id="globe"></canvas>
+
+    <script>
+        const canvas = document.getElementById('globe');
+        const ctx = canvas.getContext('2d');
+        let width, height, baseRadius, zoom = 1.0;
+        let rotationY = 0, rotationX = 0.4, isMouseDown = false, lastX, lastY;
+
+        // --- 1:1 精确地理数据模拟 (用于绘制精致地块) ---
+        const countryGeom = {
+            "GERMANY": {
+                outline: [[-20,-60], [20,-65], [40,-30], [50,10], [45,60], [10,75], [-25,65], [-45,10], [-35,-30]],
+                cities: [{n: "Frankfurt", x: -10, y: 15}, {n: "Nordhausen", x: 10, y: -10}]
+            },
+            "AUSTRIA": {
+                outline: [[-70,0], [-20,-20], [40,-30], [80,-10], [95,20], [70,50], [20,40], [-40,60], [-85,30]],
+                cities: [{n: "Vienna", x: 75, y: 15}, {n: "Salzburg", x: -20, y: 25}, {n: "Linz", x: 25, y: 5}, {n: "Gmunden", x: 5, y: 35}]
+            },
+            "USA": {
+                outline: [[-120,-40], [120,-45], [110,60], [-110,55], [-120,-40]],
+                cities: [{n: "Buffalo", x: 90, y: -10}, {n: "Ballston Lake", x: 105, y: -18}, {n: "Colgate", x: 95, y: 5}]
+            },
+            "UK": {
+                outline: [[-10,-70], [20,-60], [30,10], [15,80], [-20,85], [-35,30], [-20,-20]],
+                cities: [{n: "Winchester", x: -5, y: 60}, {n: "Bromley", x: 15, y: 50}]
+            }
+        };
+
+        const countryNodes = [
+            { name: "AUSTRIA", lat: 47.5, lng: 14.5 },
+            { name: "GERMANY", lat: 51.1, lng: 10.4 },
+            { name: "USA", lat: 39.8, lng: -98.5 },
+            { name: "UK", lat: 51.5, lng: -1.2 }
+        ];
+
+        // 保持原来的点阵
+        const landDots = [];
+        for(let i=0; i<12000; i++) {
+            landDots.push({lat: (Math.random()-0.5)*180, lng: (Math.random()-0.5)*360});
+        }
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            width = window.innerWidth; height = window.innerHeight;
+            canvas.width = width * dpr; canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            baseRadius = Math.min(width, height) * 0.35;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let clickTargets = [];
+
+        // --- 核心交互 ---
+        canvas.onmousedown = e => { isMouseDown = true; lastX = e.clientX; lastY = e.clientY; };
+        window.onmouseup = e => {
+            isMouseDown = false;
+            if (Math.abs(e.clientX - lastX) < 5) {
+                clickTargets.forEach(t => {
+                    if (Math.abs(e.clientX - t.x) < 40 && Math.abs(e.clientY - t.y) < 15) enterCountry(t.name);
+                });
+            }
+        };
+        window.onmousemove = e => {
+            if(isMouseDown) {
+                rotationY += (e.clientX - lastX) * 0.005;
+                rotationX += (e.clientY - lastY) * 0.005;
+                lastX = e.clientX; lastY = e.clientY;
+            }
+        };
+        window.onwheel = e => {
+            e.preventDefault(); zoom += e.deltaY * -0.0012; zoom = Math.min(Math.max(zoom, 0.5), 5.0);
+        };
+
+        // --- 页面逻辑 ---
+        function enterCountry(name) {
+            document.getElementById('country-name-banner').innerText = name;
+            document.getElementById('country-overlay').style.display = 'flex';
+            drawCountryMap(name);
+        }
+
+        function exitToGlobe() {
+            document.getElementById('country-overlay').style.display = 'none';
+        }
+
+        function drawCountryMap(name) {
+            const cCanvas = document.getElementById('country-canvas');
+            const cCtx = cCanvas.getContext('2d');
+            const cw = cCanvas.offsetWidth, ch = cCanvas.offsetHeight;
+            cCanvas.width = cw * 2; cCanvas.height = ch * 2;
+            cCtx.scale(2, 2);
+
+            const data = countryGeom[name] || countryGeom["GERMANY"];
+            cCtx.clearRect(0, 0, cw, ch);
+            
+            // 绘制精致的 1:1 板块
+            cCtx.save();
+            cCtx.translate(cw/2, ch/2);
+            cCtx.beginPath();
+            cCtx.strokeStyle = '#4af7a1'; cCtx.lineWidth = 1.5;
+            data.outline.forEach((p, i) => {
+                if(i===0) cCtx.moveTo(p[0]*2.5, p[1]*2.5); else cCtx.lineTo(p[0]*2.5, p[1]*2.5);
+            });
+            cCtx.closePath();
+            
+            // 填充科技感点阵
+            cCtx.fillStyle = 'rgba(74, 247, 161, 0.05)'; cCtx.fill();
+            cCtx.stroke();
+            
+            // 绘制罗列的城市
+            data.cities.forEach(city => {
+                const sx = city.x * 2.5, sy = city.y * 2.5;
+                cCtx.fillStyle = '#fff';
+                cCtx.beginPath(); cCtx.arc(sx, sy, 4, 0, Math.PI*2); cCtx.fill();
+                cCtx.fillStyle = '#fff'; cCtx.font = "12px monospace";
+                cCtx.fillText(city.n.toUpperCase(), sx + 12, sy + 5);
+                // 辅助线
+                cCtx.strokeStyle = 'rgba(74, 247, 161, 0.3)';
+                cCtx.beginPath(); cCtx.moveTo(sx, sy); cCtx.lineTo(sx+10, sy); cCtx.stroke();
+            });
+            cCtx.restore();
+        }
+
+        // --- 3D 地球主循环 ---
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            const cx = width / 2, cy = height / 2, currR = baseRadius * zoom;
+            clickTargets = [];
+
+            // 1. 陆地背景 (保持原样)
+            landDots.forEach(p => {
+                let rLat = p.lat * Math.PI / 180, rLng = (p.lng * Math.PI / 180) + rotationY;
+                let x = currR * Math.cos(rLat) * Math.sin(rLng), y = currR * Math.sin(rLat), z = currR * Math.cos(rLat) * Math.cos(rLng);
+                let yr = y * Math.cos(rotationX) - z * Math.sin(rotationX), zr = y * Math.sin(rotationX) + z * Math.cos(rotationX);
+                if(zr > -currR * 0.5) {
+                    ctx.fillStyle = `rgba(74, 247, 161, ${(zr/currR + 1.2)/3})`;
+                    ctx.fillRect(cx + x, cy - yr, 1, 1);
+                }
+            });
+
+            // 2. 国家节点与逆向字体 (保持原样)
+            const dFontSize = Math.max(9, 14 - (zoom * 1.2)); 
+            let activeNodes = countryNodes.map(n => {
+                let rLat = n.lat * Math.PI / 180, rLng = (n.lng * Math.PI / 180) + rotationY;
+                let x = currR * Math.cos(rLat) * Math.sin(rLng), y = currR * Math.sin(rLat), z = currR * Math.cos(rLat) * Math.cos(rLng);
+                let yr = y * Math.cos(rotationX) - z * Math.sin(rotationX), zr = y * Math.sin(rotationX) + z * Math.cos(rotationX);
+                return { name: n.name, sx: cx + x, sy: cy - yr, z: zr, lx: cx + x + 20, ly: cy - yr };
+            }).filter(n => n.z > 0);
+
+            activeNodes.forEach(n => {
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(n.sx, n.sy, 4, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = "rgba(74, 247, 161, 0.4)";
+                ctx.beginPath(); ctx.moveTo(n.sx, n.sy); ctx.lineTo(n.lx - 3, n.ly); ctx.stroke();
+                ctx.fillStyle = '#fff'; ctx.font = `bold ${dFontSize}px monospace`;
+                ctx.fillText(n.name, n.lx, n.ly + 4);
+                clickTargets.push({ name: n.name, x: n.lx + 20, y: n.ly });
+            });
+
+            if(!isMouseDown) rotationY += 0.0012;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>

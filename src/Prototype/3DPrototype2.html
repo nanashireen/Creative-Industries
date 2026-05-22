@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Data Hub | Visual Refined</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; color: #4af7a1; font-family: 'Courier New', monospace; }
+        canvas { display: block; width: 100vw; height: 100vh; cursor: crosshair; }
+        #detail-page {
+            position: fixed; inset: 0; background: rgba(0, 10, 0, 0.96);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 200; backdrop-filter: blur(20px);
+        }
+        .back-btn { margin-top: 40px; padding: 15px 30px; border: 2px solid #4af7a1; background: transparent; color: #4af7a1; cursor: pointer; }
+        .city-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 80%; }
+        .city-card { border: 1px solid #4af7a166; padding: 15px; text-align: center; }
+        .ui-hud { position: absolute; top: 30px; left: 30px; border-left: 3px solid #4af7a1; padding-left: 15px; pointer-events: none; z-index: 10; }
+    </style>
+</head>
+<body>
+   
+
+    <div id="detail-page">
+        <h1 id="country-title" style="font-size: 50px; margin-bottom: 40px;">COUNTRY</h1>
+        <div class="city-list" id="city-list"></div>
+        <button class="back-btn" onclick="closeDetail()">Back to global view</button>
+    </div>
+
+    <canvas id="globe"></canvas>
+
+    <script>
+        const canvas = document.getElementById('globe');
+        const ctx = canvas.getContext('2d');
+        let width, height, baseRadius;
+        let rotationY = 0, rotationX = 0.4, zoom = 1.0;
+        let isMouseDown = false, lastMouseX, lastMouseY;
+        let hoveredName = null; // 新增：记录当前悬停的国家名
+
+        const countryData = {
+            "AUSTRIA": ["Salzburg", "Linz", "Vienna", "Gmunden"],
+            "GERMANY": ["Frankfurt", "Nordhausen"],
+            "USA": ["Ballston Lake", "Baldwinsville", "Colgate Univ", "Buffalo"],
+            "CANADA": ["Montreal"],
+            "UK": ["Winchester", "Bromley"],
+            "TOGO": ["Lomé", "Togo Center"],
+            "BELGIUM": ["Brussels"],
+            "FINLAND": ["Salo"],
+            "AUSTRALIA": ["Perth"]
+        };
+
+        const countryNodes = [
+            { name: "AUSTRIA", lat: 47.5, lng: 14.5 },
+            { name: "GERMANY", lat: 51.1, lng: 10.4 },
+            { name: "USA", lat: 39.8, lng: -98.5 },
+            { name: "CANADA", lat: 56.1, lng: -106.3 },
+            { name: "UK", lat: 51.5, lng: -1.2 },
+            { name: "TOGO", lat: 8.6, lng: 1.2 },
+            { name: "BELGIUM", lat: 50.5, lng: 4.4 },
+            { name: "FINLAND", lat: 61.9, lng: 25.7 },
+            { name: "AUSTRALIA", lat: -25.2, lng: 133.7 }
+        ];
+
+        const landDots = [];
+        for(let i=0; i<12000; i++) {
+            let lat = (Math.random() - 0.5) * 180;
+            let lng = (Math.random() - 0.5) * 360;
+            const isLand = (lat > 30 && lat < 72 && lng > -12 && lng < 45) || (lat > -35 && lat < 38 && lng > -20 && lng < 52) || (lat > 10 && lat < 78 && lng > 55 && lng < 155) || (lat > 10 && lat < 80 && lng > -175 && lng < -50) || (lat > -58 && lat < 16 && lng > -85 && lng < -32) || (lat > -48 && lat < -10 && lng > 110 && lng < 155);
+            if(isLand) landDots.push({lat, lng});
+        }
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            baseRadius = Math.min(width, height) * 0.35;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let clickTargets = [];
+
+        canvas.addEventListener('mousedown', (e) => { isMouseDown = true; lastMouseX = e.clientX; lastMouseY = e.clientY; });
+        window.addEventListener('mouseup', (e) => {
+            isMouseDown = false;
+            if (Math.abs(e.clientX - lastMouseX) < 5 && Math.abs(e.clientY - lastMouseY) < 5) {
+                // 如果当前有悬停的国家，直接触发跳转
+                if (hoveredName) {
+                    showDetail(hoveredName);
+                } else {
+                    // 兼容旧的点击逻辑
+                    clickTargets.forEach(t => {
+                        if (Math.abs(e.clientX - t.x) < 40 && Math.abs(e.clientY - t.y) < 15) showDetail(t.name);
+                    });
+                }
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if(isMouseDown) {
+                rotationY += (e.clientX - lastMouseX) * 0.005;
+                rotationX += (e.clientY - lastMouseY) * 0.005;
+                lastMouseX = e.clientX; lastMouseY = e.clientY;
+            }
+
+            // 新增：实时检测鼠标是否悬停在文字标签上
+            let found = null;
+            clickTargets.forEach(t => {
+                if (Math.abs(e.clientX - t.x) < 50 && Math.abs(e.clientY - t.y) < 15) {
+                    found = t.name;
+                }
+            });
+            hoveredName = found;
+            canvas.style.cursor = found ? 'pointer' : 'crosshair';
+        });
+
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            zoom += e.deltaY * -0.0012;
+            zoom = Math.min(Math.max(zoom, 0.5), 5.0);
+        }, { passive: false });
+
+        function showDetail(name) {
+            document.getElementById('country-title').innerText = name;
+            const list = document.getElementById('city-list');
+            list.innerHTML = "";
+            countryData[name].forEach(city => {
+                const div = document.createElement('div');
+                div.className = "city-card";
+                div.innerText = city;
+                list.appendChild(div);
+            });
+            document.getElementById('detail-page').style.display = 'flex';
+        }
+
+        function closeDetail() { document.getElementById('detail-page').style.display = 'none'; }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            const centerX = width / 2, centerY = height / 2;
+            const currentR = baseRadius * zoom;
+
+            // 1. 陆地背景 (保持原样)
+            landDots.forEach(p => {
+                const rLat = p.lat * Math.PI / 180;
+                const rLng = (p.lng * Math.PI / 180) + rotationY;
+                let x = currentR * Math.cos(rLat) * Math.sin(rLng);
+                let y = currentR * Math.sin(rLat);
+                let z = currentR * Math.cos(rLat) * Math.cos(rLng);
+                const yr = y * Math.cos(rotationX) - z * Math.sin(rotationX);
+                const zr = y * Math.sin(rotationX) + z * Math.cos(rotationX);
+                if(zr > -currentR * 0.5) {
+                    ctx.fillStyle = `rgba(74, 247, 161, ${(zr/currentR + 1.2)/3})`;
+                    ctx.fillRect(centerX + x, centerY - yr, 1, 1);
+                }
+            });
+
+            // 2. 节点投影与避让 (保持逻辑)
+            clickTargets = [];
+            const dynamicFontSize = Math.max(9, 14 - (zoom * 1.2)); 
+
+            let activeNodes = countryNodes.map(n => {
+                const rLat = n.lat * Math.PI / 180;
+                const rLng = (n.lng * Math.PI / 180) + rotationY;
+                let x = currentR * Math.cos(rLat) * Math.sin(rLng);
+                let y = currentR * Math.sin(rLat);
+                let z = currentR * Math.cos(rLat) * Math.cos(rLng);
+                const yr = y * Math.cos(rotationX) - z * Math.sin(rotationX);
+                const zr = y * Math.sin(rotationX) + z * Math.cos(rotationX);
+                const offsetX = 15 + (zoom * 2);
+                return { name: n.name, sx: centerX + x, sy: centerY - yr, z: zr, lx: centerX + x + offsetX, ly: centerY - yr };
+            }).filter(n => n.z > 0);
+
+            for(let step=0; step<3; step++) {
+                for(let i=0; i<activeNodes.length; i++) {
+                    for(let j=i+1; j<activeNodes.length; j++) {
+                        let a = activeNodes[i], b = activeNodes[j];
+                        const dx = a.lx - b.lx;
+                        const dy = a.ly - b.ly;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        const minDist = 35; 
+                        if(dist < minDist) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (minDist - dist) / 2;
+                            a.lx += Math.cos(angle) * force;
+                            a.ly += Math.sin(angle) * force;
+                            b.lx -= Math.cos(angle) * force;
+                            b.ly -= Math.sin(angle) * force;
+                        }
+                    }
+                }
+            }
+
+            // 3. 最终绘制 (新增高亮绘制逻辑)
+            activeNodes.forEach(n => {
+                const isHovered = (hoveredName === n.name);
+
+                // 锚点：高亮时变白变大
+                ctx.fillStyle = isHovered ? '#fff' : '#fff';
+                ctx.shadowBlur = isHovered ? 20 : 10; 
+                ctx.shadowColor = '#4af7a1';
+                ctx.beginPath(); 
+                ctx.arc(n.sx, n.sy, isHovered ? 6 : 4, 0, Math.PI*2); 
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // 悬停时的额外光圈 (呼吸感)
+                if (isHovered) {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(n.sx, n.sy, 10 + Math.sin(Date.now()*0.01)*3, 0, Math.PI*2);
+                    ctx.stroke();
+                }
+
+                // 细线引导：高亮时变实
+                ctx.strokeStyle = isHovered ? "rgba(255, 255, 255, 0.8)" : "rgba(74, 247, 161, 0.4)";
+                ctx.beginPath(); ctx.moveTo(n.sx, n.sy); ctx.lineTo(n.lx - 3, n.ly); ctx.stroke();
+
+                // 文字：高亮时变亮变大
+                ctx.fillStyle = isHovered ? '#fff' : '#fff';
+                const currentFontSize = isHovered ? dynamicFontSize + 2 : dynamicFontSize;
+                ctx.font = `${isHovered ? 'bold' : 'bold'} ${currentFontSize}px monospace`;
+                ctx.fillText(n.name, n.lx, n.ly + 4);
+
+                // 保存碰撞区域
+                clickTargets.push({ name: n.name, x: n.lx + 20, y: n.ly });
+            });
+
+            if(!isMouseDown) rotationY += 0.001;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
